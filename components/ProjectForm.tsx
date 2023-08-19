@@ -4,6 +4,7 @@ import React, { ChangeEvent, useState } from 'react';
 import Image from 'next/image';
 
 import { SessionInterface } from '@/common.types';
+import FormField from './FormField';
 
 type Props = {
     type: string,
@@ -26,6 +27,10 @@ const ProjectForm = ({ type, project }: Props) => {
 
     const handleChangeImage = (e: ChangeEvent<HTMLInputElement>) => {
 
+    };
+
+    const handleStateChange = (fieldName: string, value: string) => {
+        setform((prevState) => ({ ...prevState, [fieldName]: value }))
     };
 
     return (
@@ -51,6 +56,37 @@ const ProjectForm = ({ type, project }: Props) => {
                     />
                 )}
             </div>
+
+            <FormField
+                title="Title"
+                state={form.title}
+                placeholder="Flexibble"
+                setState={(value) => handleStateChange('title', value)}
+            />
+
+            <FormField
+                title="Description"
+                state={form.description}
+                placeholder="Showcase and discover remakable developer project."
+                setState={(value) => handleStateChange('description', value)}
+            />
+
+            <FormField
+                type="url"
+                title="Website URL"
+                state={form.liveSiteUrl}
+                placeholder="https://eRa.dev"
+                setState={(value) => handleStateChange('liveSiteUrl', value)}
+            />
+
+            <FormField
+                type="url"
+                title="GitHub URL"
+                state={form.githubUrl}
+                placeholder="https://github.com/RamadanEmin"
+                setState={(value) => handleStateChange('githubUrl', value)}
+            />
+          
         </form>
     );
 }
