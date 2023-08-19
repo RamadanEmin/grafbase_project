@@ -5,6 +5,8 @@ import Image from 'next/image';
 
 import { SessionInterface } from '@/common.types';
 import FormField from './FormField';
+import CustomMenu from './CustomMenu';
+import { categoryFilters } from '@/constants';
 
 type Props = {
     type: string,
@@ -22,7 +24,7 @@ const ProjectForm = ({ type, project }: Props) => {
     });
 
     const handleFormSubmit = async (e: React.FormEvent) => {
-   
+
     };
 
     const handleChangeImage = (e: ChangeEvent<HTMLInputElement>) => {
@@ -86,7 +88,14 @@ const ProjectForm = ({ type, project }: Props) => {
                 placeholder="https://github.com/RamadanEmin"
                 setState={(value) => handleStateChange('githubUrl', value)}
             />
-          
+
+            <CustomMenu
+                title="Category"
+                state={form.category}
+                filters={categoryFilters}
+                setState={(value) => handleStateChange('category', value)}
+            />
+
         </form>
     );
 }
