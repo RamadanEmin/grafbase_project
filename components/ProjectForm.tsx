@@ -1,19 +1,24 @@
 'use client';
 
 import React, { ChangeEvent, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 
-import { SessionInterface } from '@/common.types';
+import { ProjectInterface, SessionInterface } from '@/common.types';
 import FormField from './FormField';
 import CustomMenu from './CustomMenu';
 import { categoryFilters } from '@/constants';
+import Button from './Button';
+import { createNewProject, fetchToken, updateProject } from '@/lib/actions';
 
 type Props = {
     type: string,
     session: SessionInterface,
+    project?: ProjectInterface
 }
 
-const ProjectForm = ({ type, project }: Props) => {
+const ProjectForm = ({ type, session, project }: Props) => {
+    const [isSubmitting, setIsSubmitting] = useState(false);
     const [form, setform] = useState({
         title: project?.title || '',
         description: project?.description || '',
@@ -23,8 +28,32 @@ const ProjectForm = ({ type, project }: Props) => {
         category: project?.category || ''
     });
 
-    const handleFormSubmit = async (e: React.FormEvent) => {
+    const router = useRouter();
 
+    const handleFormSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+
+        setIsSubmitting(true);
+
+        const { token } = await fetchToken();
+
+        try {
+            if (type === 'create') {
+                await createNewProject(form, session?.user?.id, token);
+
+                router.push('/');
+            }
+
+            if (type === 'edit') {
+                await updateProject(form, project?.id as string, token);
+
+                router.push('/');
+            }
+        } catch (error) {
+            console.log(error);
+        } finally {
+            setIsSubmitting(false);
+        }
     };
 
     const handleChangeImage = (e: ChangeEvent<HTMLInputElement>) => {
@@ -96,6 +125,17 @@ const ProjectForm = ({ type, project }: Props) => {
                 setState={(value) => handleStateChange('category', value)}
             />
 
+            <div className="flexStart w-full">
+                <Button
+                    title={isSubmitting
+                        ? `${type === 'create' ? 'Creating' : 'Editing'}`
+                        : `${type === 'create' ? 'Create' : 'Edit'}`
+                    }
+                    type="submit"
+                    leftIcon={isSubmitting ? '' : '/plus.svg'}
+                    isSubmitting={isSubmitting}
+                />
+            </div>
         </form>
     );
 }
