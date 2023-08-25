@@ -5,6 +5,7 @@ import { getCurrentUser } from '@/lib/session';
 import { getProjectDetails } from '@/lib/actions';
 import Modal from '@/components/Modal';
 import { ProjectInterface } from '@/common.types';
+import RelatedProjects from '@/components/RelatedProjects';
 
 const Project = async ({ params: { id } }: { params: { id: string } }) => {
     const session = await getCurrentUser()
@@ -88,6 +89,8 @@ const Project = async ({ params: { id } }: { params: { id: string } }) => {
                 </Link>
                 <span className="w-full h-0.5 bg-light-white-200" />
             </section>
+
+            <RelatedProjects userId={projectDetails?.createdBy?.id} projectId={projectDetails?.id} />
         </Modal>
     );
 }
