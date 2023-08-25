@@ -14,6 +14,14 @@ export const createProjectMutation = `
 	}
 `;
 
+export const deleteProjectMutation = `
+    mutation DeleteProject($id: ID!) {
+        projectDelete(by: { id: $id }) {
+            deletedId
+        }
+    }
+`;
+
 export const createUserMutation = `
 	mutation CreateUser($input: UserCreateInput!) {
 		userCreate(input: $input) {
