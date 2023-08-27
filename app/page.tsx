@@ -1,7 +1,7 @@
-import { ProjectInterface } from "@/common.types";
-import Categories from "@/components/Categories";
-import ProjectCard from "@/components/ProjectCard";
-import { fetchAllProjects } from "@/lib/actions";
+import { ProjectInterface } from '@/common.types';
+import Categories from '@/components/Categories';
+import ProjectCard from '@/components/ProjectCard';
+import { fetchAllProjects } from '@/lib/actions';
 
 type ProjectsSearch = {
     projectSearch: {
@@ -15,8 +15,21 @@ type ProjectsSearch = {
     }
 }
 
-const Home = async() =>{
-    const data = await fetchAllProjects() as ProjectsSearch;
+type SearchParams = {
+    category?: string,
+    endcursor: string
+};
+
+type Props = {
+    searchParams: SearchParams
+};
+
+export const dynamic = 'force-dynamic';
+export const dynamicParams = true;
+export const revalidate = 0;
+
+const Home = async ({ searchParams: { category, endcursor } }: Props) => {
+    const data = await fetchAllProjects(category, endcursor) as ProjectsSearch;
 
     const projectsToDisplay = data?.projectSearch?.edges || [];
 
@@ -34,19 +47,19 @@ const Home = async() =>{
 
     return (
         <section className="flex-start flex-col paddings mb-16">
-             <Categories />
-            
+            <Categories />
+
             <section className="projects-grid">
                 {projectsToDisplay.map(({ node }: { node: ProjectInterface }) => (
-                      <ProjectCard
-                      key={node?.id}
-                      id={node?.id}
-                      image={node?.image}
-                      title={node?.title}
-                      name={node?.createdBy?.name}
-                      avatarUrl={node?.createdBy?.avatarUrl}
-                      userId={node?.createdBy?.id}
-                  />
+                    <ProjectCard
+                        key={node?.id}
+                        id={node?.id}
+                        image={node?.image}
+                        title={node?.title}
+                        name={node?.createdBy?.name}
+                        avatarUrl={node?.createdBy?.avatarUrl}
+                        userId={node?.createdBy?.id}
+                    />
                 ))}
             </section>
 
