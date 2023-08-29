@@ -1,5 +1,6 @@
 import { ProjectInterface } from '@/common.types';
 import Categories from '@/components/Categories';
+import LoadMore from '@/components/LoadMore';
 import ProjectCard from '@/components/ProjectCard';
 import { fetchAllProjects } from '@/lib/actions';
 
@@ -63,7 +64,12 @@ const Home = async ({ searchParams: { category, endcursor } }: Props) => {
                 ))}
             </section>
 
-            <h1>LoadMore</h1>
+            <LoadMore
+                startCursor={pagination?.startCursor}
+                endCursor={pagination?.endCursor}
+                hasPreviousPage={pagination?.hasPreviousPage}
+                hasNextPage={pagination?.hasNextPage}
+            />
         </section>
     );
 }
