@@ -38,7 +38,7 @@ const LoadMore = ({ startCursor, endCursor, hasPreviousPage, hasNextPage }: Prop
             )}
 
             {hasNextPage && (
-                <Button title="Next Page" handleClick={() => handleNavigation('next')} />
+                <Button title="Next Shots" handleClick={() => handleNavigation('next')} />
             )}
         </div>
     );
